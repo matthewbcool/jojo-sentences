@@ -5,9 +5,12 @@ import './App.css'
 
 class App extends Component {
   state = {
-    showVideos: false
+    showVideos: false,
+    currentVideo: '',
+    nextVideo: '',
+    queuedVideo: '',
+    videoQueueIndex: 2
   }
-
   makeNewVideo = (id, start, end) => {
     return (
       <YouTube
@@ -23,18 +26,60 @@ class App extends Component {
         }}
         onReady={this._onReady}
         onStateChange={this._onStateChange}
+        onEnd={() => this.moveVideoUpQueue()}
       />
     )
   }
 
-  _onReady(event) {}
+  componentDidMount() {
+    let initializeVideoList = Object.values(phrases)
+    //set the current video equal to the 1st element in vid list
+    this.setState({
+      currentVideo: this.makeNewVideo(
+        initializeVideoList[0].id,
+        initializeVideoList[0].start,
+        initializeVideoList[0].end
+      )
+    })
+    this.setState({
+      nextVideo: this.makeNewVideo(
+        initializeVideoList[1].id,
+        initializeVideoList[1].start,
+        initializeVideoList[1].end
+      )
+    })
+  }
+
+  moveVideoUpQueue = () => {
+    let initializeVideoList = Object.values(phrases)
+    this.setState({ currentVideo: this.state.nextVideo })
+
+    let queuedId = initializeVideoList[this.state.videoQueueIndex].id
+    let queuedStart = initializeVideoList[this.state.videoQueueIndex].start
+    let queuedEnd = initializeVideoList[this.state.videoQueueIndex].end
+
+    this.setState({
+      queuedVideo: this.makeNewVideo(queuedId, queuedStart, queuedEnd)
+    })
+    this.setState({ nextVideo: this.state.queuedVideo })
+  }
+
+  incrementQueueIndex = () => {
+    this.setState((prevState, props) => ({
+      videoQueueIndex: prevState.videoQueueIndex + 1
+    }))
+  }
+
+  _onReady(event) {
+    //event fires when the video first loads I think
+  }
 
   _onStateChange(event) {
     if (event.target.getPlayerState() === 0) {
-      console.log('make the next video')
+      //use this for potential performance enhancements
     }
   }
-  showVideo = () => {
+  showVideos = () => {
     if (this.state.showVideos === false) {
       this.setState({ showVideos: true })
     } else {
@@ -45,14 +90,8 @@ class App extends Component {
   render() {
     return (
       <div className='App'>
-        <button onClick={this.showVideo}>HELL 2 U</button>
-        {this.state.showVideos
-          ? this.makeNewVideo(
-              phrases.HELL_TO_YOU.id,
-              phrases.HELL_TO_YOU.start,
-              phrases.HELL_TO_YOU.end
-            )
-          : null}
+        <button onClick={this.showVideos}>RUN THIS MADNESS!</button>
+        {this.state.showVideos ? this.state.currentVideo : null}
       </div>
     )
   }
