@@ -9,7 +9,6 @@ class App extends Component {
   }
 
   makeNewVideo = (id, start, end) => {
-    console.log('video made')
     return (
       <YouTube
         videoId={id}
@@ -23,12 +22,24 @@ class App extends Component {
           }
         }}
         onReady={this._onReady}
+        onStateChange={this._onStateChange}
       />
     )
   }
 
+  _onReady(event) {}
+
+  _onStateChange(event) {
+    if (event.target.getPlayerState() === 0) {
+      console.log('make the next video')
+    }
+  }
   showVideo = () => {
-    this.setState({ showVideos: true })
+    if (this.state.showVideos === false) {
+      this.setState({ showVideos: true })
+    } else {
+      this.setState({ showVideos: false })
+    }
   }
 
   render() {

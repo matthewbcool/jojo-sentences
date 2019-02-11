@@ -8,5 +8,15 @@ export const phrases = {
     id: 'BWTvrboNCCM',
     start: 44,
     end: 47
+  },
+  HEY_BABY: {
+    id: 'MdV2uovbgY8',
+    start: 59,
+    end: 61
+  },
+  TORNADO_OVERDRIVE: {
+    id: 'MdV2uovbgY8',
+    start: 76,
+    end: 79
   }
 }
