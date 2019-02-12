@@ -52,22 +52,26 @@ class App extends Component {
 
   moveVideoUpQueue = () => {
     let initializeVideoList = Object.values(phrases)
+    console.log('next video: ' + this.state.nextVideo)
     this.setState({ currentVideo: this.state.nextVideo })
 
     let queuedId = initializeVideoList[this.state.videoQueueIndex].id
     let queuedStart = initializeVideoList[this.state.videoQueueIndex].start
     let queuedEnd = initializeVideoList[this.state.videoQueueIndex].end
 
-    this.setState({
-      queuedVideo: this.makeNewVideo(queuedId, queuedStart, queuedEnd)
+    /* this.setState({
+      nextVideo: this.makeNewVideo(queuedId, queuedStart, queuedEnd)
     })
-    this.setState({ nextVideo: this.state.queuedVideo })
+    this.setState(this.incrementQueueIndex(this.state)) */
   }
 
-  incrementQueueIndex = () => {
-    this.setState((prevState, props) => ({
-      videoQueueIndex: prevState.videoQueueIndex + 1
-    }))
+  incrementQueueIndex = (prevState, props) => {
+    if (prevState.videoQueueIndex === 3) {
+      return null
+    } else
+      return {
+        videoQueueIndex: prevState.videoQueueIndex + 1
+      }
   }
 
   _onReady(event) {
