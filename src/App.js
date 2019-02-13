@@ -9,7 +9,7 @@ class App extends Component {
     currentVideo: '',
     nextVideo: '',
     queuedVideo: '',
-    videoQueueIndex: 2
+    videoQueueIndex: 1
   }
   makeNewVideo = (id, start, end) => {
     return (
@@ -26,52 +26,27 @@ class App extends Component {
         }}
         onReady={this._onReady}
         onStateChange={this._onStateChange}
-        onEnd={() => this.moveVideoUpQueue()}
+        onEnd={() => this.moveVideoUpQueue(this.state)}
       />
     )
   }
 
   componentDidMount() {
-    let initializeVideoList = Object.values(phrases)
     //set the current video equal to the 1st element in vid list
-    this.setState({
-      currentVideo: this.makeNewVideo(
-        initializeVideoList[0].id,
-        initializeVideoList[0].start,
-        initializeVideoList[0].end
-      )
-    })
-    this.setState({
-      nextVideo: this.makeNewVideo(
-        initializeVideoList[1].id,
-        initializeVideoList[1].start,
-        initializeVideoList[1].end
-      )
-    })
   }
 
-  moveVideoUpQueue = () => {
-    let initializeVideoList = Object.values(phrases)
-    console.log('next video: ' + this.state.nextVideo)
-    this.setState({ currentVideo: this.state.nextVideo })
+  moveVideoUpQueue = () => {}
 
-    let queuedId = initializeVideoList[this.state.videoQueueIndex].id
-    let queuedStart = initializeVideoList[this.state.videoQueueIndex].start
-    let queuedEnd = initializeVideoList[this.state.videoQueueIndex].end
-
-    /* this.setState({
-      nextVideo: this.makeNewVideo(queuedId, queuedStart, queuedEnd)
-    })
-    this.setState(this.incrementQueueIndex(this.state)) */
-  }
-
-  incrementQueueIndex = (prevState, props) => {
-    if (prevState.videoQueueIndex === 3) {
+  incrementQueueIndex = (prevState, initializeVideoList) => {
+    console.log(this.state.videoQueueIndex)
+    if (prevState.videoQueueIndex >= initializeVideoList.length) {
       return null
-    } else
+    } else {
       return {
-        videoQueueIndex: prevState.videoQueueIndex + 1
+        videoQueueIndex: prevState.videoQueueIndex + 1,
+        currentVideo: this.state.nextVideo
       }
+    }
   }
 
   _onReady(event) {
@@ -84,10 +59,19 @@ class App extends Component {
     }
   }
   showVideos = () => {
+    let initializeVideoList = Object.values(phrases)
     if (this.state.showVideos === false) {
       this.setState({ showVideos: true })
+      this.setState({
+        currentVideo: this.makeNewVideo(
+          initializeVideoList[0].id,
+          initializeVideoList[0].start,
+          initializeVideoList[0].end
+        )
+      })
     } else {
       this.setState({ showVideos: false })
+      this.setState({ currentVideo: '' })
     }
   }
 
