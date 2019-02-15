@@ -26,7 +26,7 @@ class App extends Component {
         }}
         onReady={this._onReady}
         onStateChange={this._onStateChange}
-        onEnd={() => this.moveVideoUpQueue(this.state)}
+        onEnd={() => this.moveVideoUpQueue()}
       />
     )
   }
