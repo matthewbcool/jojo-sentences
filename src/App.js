@@ -5,15 +5,21 @@ import './App.css'
 
 function App() {
   const [toggleVideos, setVideoVis] = useState(false)
-  const [phrasesObject, setPhrases] = useState(phrases)
+  //const [phrasesObject, setPhrases] = useState(phrases)
   const [currentVideo, setCurrentVid] = useState({})
+  const [videoIndex, setVidIndex] = useState(0)
 
   useEffect(() => {
+    //change this to the setPhrases(phrasesOject) once user input is a thing
     let phraseList = Object.values(phrases)
     setCurrentVid(
-      getCurrentVid(phraseList[0].id, phraseList[0].start, phraseList[0].end)
+      getCurrentVid(
+        phraseList[videoIndex].id,
+        phraseList[videoIndex].start,
+        phraseList[videoIndex].end
+      )
     )
-  })
+  }, [currentVideo])
 
   function getCurrentVid(id, start, end) {
     return (
@@ -28,7 +34,7 @@ function App() {
             end: end
           }
         }}
-        onEnd={() => console.log('onto the next one!')}
+        onEnd={() => setVidIndex(videoIndex + 1)}
       />
     )
   }
