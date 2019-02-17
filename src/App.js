@@ -1,15 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import YouTube from 'react-youtube'
 import { phrases } from './joJoWordList'
 import './App.css'
 
 function App() {
   const [toggleVideos, setVideoVis] = useState(false)
+  const [phrasesObject, setPhrases] = useState(phrases)
+  const [currentVideo, setCurrentVid] = useState({})
 
-  // const [currentVideo, setCurrentVid] = useState({})
+  useEffect(() => {
+    let phraseList = Object.values(phrases)
+    setCurrentVid(
+      getCurrentVid(phraseList[0].id, phraseList[0].start, phraseList[0].end)
+    )
+  })
 
-  /*
-  setCurrentVid = (id, start, end) => {
+  function getCurrentVid(id, start, end) {
     return (
       <YouTube
         videoId={id}
@@ -22,19 +28,17 @@ function App() {
             end: end
           }
         }}
-        onReady={this._onReady}
-        onStateChange={this._onStateChange}
-        onEnd={() => this.moveVideoUpQueue()}
+        onEnd={() => console.log('onto the next one!')}
       />
     )
-  } */
+  }
 
   return (
     <div className='App'>
       <button onClick={() => setVideoVis(!toggleVideos)}>
         RUN THIS MADNESS!
       </button>
-      {toggleVideos ? 'VIDEO PLAYING' : null}
+      {toggleVideos ? currentVideo : null}
     </div>
   )
 }
