@@ -12,13 +12,17 @@ function App() {
   useEffect(() => {
     //change this to the setPhrases(phrasesOject) once user input is a thing
     let phraseList = Object.values(phrases)
-    setCurrentVid(
-      getCurrentVid(
-        phraseList[videoIndex].id,
-        phraseList[videoIndex].start,
-        phraseList[videoIndex].end
+    if (phraseList.length === videoIndex) {
+      return null
+    } else {
+      setCurrentVid(
+        getCurrentVid(
+          phraseList[videoIndex].id,
+          phraseList[videoIndex].start,
+          phraseList[videoIndex].end
+        )
       )
-    )
+    }
   }, [currentVideo])
 
   function getCurrentVid(id, start, end) {
