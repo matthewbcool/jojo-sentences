@@ -8,12 +8,13 @@ function App() {
   //const [phrasesObject, setPhrases] = useState(phrases)
   const [currentVideo, setCurrentVid] = useState({})
   const [videoIndex, setVidIndex] = useState(0)
+  const [prevVideoIndex, setPrevIndex] = useState(-1)
 
   useEffect(() => {
     //change this to the setPhrases(phrasesOject) once user input is a thing
     let phraseList = Object.values(phrases)
     if (phraseList.length === videoIndex) {
-      return null
+      return undefined
     } else {
       setCurrentVid(
         getCurrentVid(
@@ -23,22 +24,30 @@ function App() {
         )
       )
     }
-  }, [currentVideo])
+  })
+
+  let VidEndFunction = () => {
+    setVidIndex(videoIndex + 1)
+  }
 
   function getCurrentVid(id, start, end) {
     return (
       <YouTube
         videoId={id}
         opts={{
-          height: '390',
-          width: '640',
+          height: '290',
+          width: '540',
           playerVars: {
             autoplay: 1,
             start: start,
             end: end
           }
         }}
-        onEnd={() => setVidIndex(videoIndex + 1)}
+        onEnd={() => {
+          if (prevVideoIndex === videoIndex - 1) {
+            VidEndFunction()
+          }
+        }}
       />
     )
   }
