@@ -8,15 +8,14 @@ function App() {
   //const [phrasesObject, setPhrases] = useState(phrases)
   const [currentVideo, setCurrentVid] = useState({})
   const [videoIndex, setVidIndex] = useState(0)
-  const [prevVideoIndex, setPrevIndex] = useState(-1)
 
   useEffect(() => {
     //change this to the setPhrases(phrasesOject) once user input is a thing
     let phraseList = Object.values(phrases)
-    if (phraseList.length === videoIndex) {
+    if (phraseList.length === videoIndex || videoIndex % 1 !== 0) {
       return undefined
     } else {
-      setCurrentVid(
+      return setCurrentVid(
         getCurrentVid(
           phraseList[videoIndex].id,
           phraseList[videoIndex].start,
@@ -24,11 +23,7 @@ function App() {
         )
       )
     }
-  })
-
-  let VidEndFunction = () => {
-    setVidIndex(videoIndex + 1)
-  }
+  }, [currentVideo])
 
   function getCurrentVid(id, start, end) {
     return (
@@ -44,9 +39,7 @@ function App() {
           }
         }}
         onEnd={() => {
-          if (prevVideoIndex === videoIndex - 1) {
-            VidEndFunction()
-          }
+          setVidIndex(videoIndex + 1)
         }}
       />
     )
